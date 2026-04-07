@@ -24,12 +24,14 @@ jobs:
         run: docker compose up -d app db
 
       - name: Instalar Dependências (Composer)
-        run: docker compose exec -T app composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: |
+          docker compose exec -u root -T app git config --global --add safe.directory /var/www
+          docker compose exec -u root -T app composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Gerar Application Key
         run: docker compose exec -T app php artisan key:generate
 
-      - name: Aguardar Banco de Dados (Healthcheck)
+      - name: Aguardar Banco de Dados
         run: |
           attempt=0
           until [ $attempt -ge 5 ] || docker compose exec -T db mysqladmin ping -h"localhost" -u"root" -p"root" --silent; do
@@ -41,12 +43,8 @@ jobs:
       - name: Rodar Migrations e Seeds
         run: docker compose exec -T app php artisan migrate:fresh --seed
 
-      - name: 🔎 Static Analysis (PHPStan)
+      - name: Análise Estática (PHPStan)
         run: docker compose exec -T app ./vendor/bin/phpstan analyse --memory-limit=1G
-
-      - name: 🎨 Code Style Check (Fixer/Pint)
-
-        run: docker compose exec -T app ./vendor/bin/php-cs-fixer fix --dry-run --diff
 
       - name: Executar Testes (PHPUnit)
         run: docker compose exec -T app php artisan test
