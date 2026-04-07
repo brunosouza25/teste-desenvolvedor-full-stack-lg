@@ -34,7 +34,7 @@ jobs:
           docker compose exec -u root -T app chmod -R 777 storage bootstrap/cache
 
       - name: Gerar Application Key
-        run: docker compose exec -T app php artisan key:generate
+        run: docker compose exec -u root -T app php artisan key:generate
 
       - name: Aguardar Banco de Dados
         run: |
@@ -46,10 +46,13 @@ jobs:
           done
 
       - name: Rodar Migrations e Seeds
-        run: docker compose exec -T app php artisan migrate:fresh --seed
+        run: docker compose exec -u root -T app php artisan migrate:fresh --seed
 
       - name: Análise Estática (PHPStan)
         run: docker compose exec -T app ./vendor/bin/phpstan analyse --memory-limit=1G
+
+      - name: Verificação de Estilo (PHP-CS-Fixer)
+        run: docker compose exec -u root -T app ./vendor/bin/php-cs-fixer fix --config=.php_cs --dry-run --diff
 
       - name: Executar Testes (PHPUnit)
         run: docker compose exec -T app php artisan test
