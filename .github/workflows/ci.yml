@@ -28,6 +28,11 @@ jobs:
           docker compose exec -u root -T app git config --global --add safe.directory /var/www
           docker compose exec -u root -T app composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
+      - name: Preparar Pastas e Permissões
+        run: |
+          docker compose exec -u root -T app mkdir -p bootstrap/cache storage/framework/sessions storage/framework/views storage/framework/cache
+          docker compose exec -u root -T app chmod -R 777 storage bootstrap/cache
+
       - name: Gerar Application Key
         run: docker compose exec -T app php artisan key:generate
 

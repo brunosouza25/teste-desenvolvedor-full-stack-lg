@@ -2,8 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Productivity;
 use App\Product;
+use App\Productivity;
 use Faker\Generator as Faker;
 
 $factory->define(Productivity::class, function (Faker $faker) {

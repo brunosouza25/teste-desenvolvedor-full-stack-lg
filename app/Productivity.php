@@ -18,9 +18,8 @@ class Productivity extends Model
         'product_id',
         'produced_quantity',
         'defects_quantity',
-        'production_date'
+        'production_date',
     ];
-
 
     public function product()
     {

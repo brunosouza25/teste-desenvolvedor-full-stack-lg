@@ -38,11 +38,11 @@ class ProductivityService
                 : 0;
 
             return (object) [
-                'product_id'     => $firstItem->product_id,
-                'product_name'   => $firstItem->product->name ?? 'N/A',
+                'product_id' => $firstItem->product_id,
+                'product_name' => $firstItem->product->name ?? 'N/A',
                 'total_produced' => $totalProduced,
-                'total_defects'  => $totalDefects,
-                'efficiency'     => (float) $efficiency,
+                'total_defects' => $totalDefects,
+                'efficiency' => (float) $efficiency,
             ];
         })->values();
     }

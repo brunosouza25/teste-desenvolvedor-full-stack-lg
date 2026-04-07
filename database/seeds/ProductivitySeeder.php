@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use App\Productivity;
 use App\Product;
+use App\Productivity;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class ProductivitySeeder extends Seeder
 {

@@ -18,7 +18,7 @@ class DashboardApiTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'metrics',
-            'availableLines'
+            'availableLines',
         ]);
     }
 
