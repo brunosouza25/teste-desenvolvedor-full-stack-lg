@@ -27,10 +27,10 @@ class ProductivitySeeder extends Seeder
                 $defects = (int) ($produced * $defectPercentage);
 
                 Productivity::create([
-                    'product_id'       => $product->id,
+                    'product_id' => $product->id,
                     'produced_quantity' => $produced,
-                    'defects_quantity'  => $defects,
-                    'production_date'   => $startDate->copy()->addDays($i)->format('Y-m-d'),
+                    'defects_quantity' => $defects,
+                    'production_date' => $startDate->copy()->addDays($i)->format('Y-m-d'),
                 ]);
             }
         }
