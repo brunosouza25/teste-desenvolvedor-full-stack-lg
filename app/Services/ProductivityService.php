@@ -2,39 +2,55 @@
 
 namespace App\Services;
 
-use App\Productivity;
 use App\Product;
-use Illuminate\Support\Facades\DB;
+use App\Productivity;
+use Illuminate\Support\Collection;
 
 class ProductivityService
 {
+    /**
+     *
+     * @param int|string|null $selectedProductId
+     * @return Collection
+     */
     public function getMetrics($selectedProductId = null)
     {
         $query = Productivity::with('product')
-            ->whereYear('production_date', 2026)
-            ->whereMonth('production_date', 1);
+            ->whereYear('production_date', '=', '2026')
+            ->whereMonth('production_date', '=', '1');
 
         if ($selectedProductId) {
-            $query->where('product_id', $selectedProductId);
+            $query->where('product_id', '=', (string) $selectedProductId);
         }
 
-        $metrics = $query->selectRaw('
-                product_id,
-                SUM(produced_quantity) as total_produced,
-                SUM(defects_quantity) as total_defects
-            ')
-            ->groupBy('product_id')
-            ->get();
+        /** @var Collection $productivities */
+        $productivities = $query->get();
 
-        return $metrics->map(function ($item) {
-            $efficiency = $item->total_produced > 0 ? (($item->total_produced - $item->total_defects) / $item->total_produced) * 100 : 0; //calculo de eficiência
-            $item->efficiency = $efficiency;
-            $item->product_name = $item->product->name;
+        return $productivities->groupBy('product_id')->map(function ($group) {
+            /** @var Collection $group */
+            $firstItem = $group->first();
 
-            return $item;
-        });
+            $totalProduced = (int) $group->sum('produced_quantity');
+            $totalDefects = (int) $group->sum('defects_quantity');
+
+            $efficiency = $totalProduced > 0
+                ? (($totalProduced - $totalDefects) / $totalProduced) * 100
+                : 0;
+
+            return (object) [
+                'product_id'     => $firstItem->product_id,
+                'product_name'   => $firstItem->product->name ?? 'N/A',
+                'total_produced' => $totalProduced,
+                'total_defects'  => $totalDefects,
+                'efficiency'     => (float) $efficiency,
+            ];
+        })->values();
     }
 
+    /**
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getAvailableLines()
     {
         return Product::orderBy('name')->get();
