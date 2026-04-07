@@ -1,6 +1,8 @@
+version: '3.8'
+
 services:
   app:
-    container_name: laravel-app
+    container_name: projeto-full-stack-bruno-souza-app
     build:
       context: .
       dockerfile: docker/php/Dockerfile
@@ -11,25 +13,25 @@ services:
       - .:/var/www
       - /var/www/node_modules
     networks:
-      - laravel
+      - projeto-full-stack-bruno-souza-network
     depends_on:
       - db
 
   nginx:
-    container_name: laravel-nginx
+    container_name: projeto-full-stack-bruno-souza-nginx
     image: nginx:alpine
     ports:
-      - "8000:80"
+      - "8077:80"
     volumes:
       - .:/var/www
       - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app
     networks:
-      - laravel
+      - projeto-full-stack-bruno-souza-network
 
   db:
-    container_name: laravel-db
+    container_name: projeto-full-stack-bruno-souza-db
     image: mysql:8.0
     restart: always
     environment:
@@ -38,14 +40,14 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     volumes:
-      - db-data:/var/lib/mysql
+      - projeto-full-stack-bruno-souza-db-data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "3325:3306"
     networks:
-      - laravel
+      - projeto-full-stack-bruno-souza-network
 
   workspace:
-    container_name: laravel-workspace
+    container_name: projeto-full-stack-bruno-souza-workspace
     build:
       context: .
       dockerfile: docker/php/Dockerfile
@@ -57,12 +59,12 @@ services:
     working_dir: /var/www
     tty: true
     networks:
-      - laravel
+      - projeto-full-stack-bruno-souza-network
     entrypoint: ["/bin/sh"]
 
 volumes:
-  db-data:
+  projeto-full-stack-bruno-souza-db-data:
 
 networks:
-  laravel:
+  projeto-full-stack-bruno-souza-network:
     driver: bridge
