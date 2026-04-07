@@ -1,6 +1,15 @@
-# Teste Desenvolvedor Full Stack - LG
+# Teste Desenvolvedor Full Stack - LG Electronics
 
-Este projeto é uma aplicação Laravel containerizada com Docker, preparada para rodar de forma rápida e padronizada em qualquer ambiente.
+Este projeto é uma aplicação Laravel containerizada com Docker, focada no acompanhamento da eficiência produtiva da **Planta A**. O sistema apresenta um dashboard de indicadores para as linhas de Geladeira, Máquina de Lavar, TV e Ar-Condicionado.
+
+---
+
+## 💡 Decisões Técnicas (Filtro de Datas)
+
+Conforme solicitado nos requisitos do desafio, o dashboard foi desenvolvido para exibir a eficiência de produção especificamente durante o **mês de Janeiro de 2026**.
+
+- **Escopo:** Para garantir a entrega fiel ao que foi pedido ("apresente a eficiência... durante o mês de janeiro de 2026"), os filtros de data foram mantidos fixos neste período.
+- **Roadmap:** A implementação de um seletor dinâmico de Meses/Anos está listada na seção de melhorias futuras para uma versão de produção em larga escala.
 
 ---
 
@@ -113,22 +122,26 @@ driver: bridge
 Melhorias Futuras (Roadmap)
 Se este projeto fosse para um ambiente de produção real, estas seriam as evoluções planejadas:
 
-1. Modernização das Tecnologias
-   Laravel 13 + PHP 8.5: Atualizar para as versões mais recentes para ganhar performance e usar as novas funções de tipagem do PHP.
+1. Modernização da Stack
+    * Upgrade de Core: Migração para Laravel 13 e PHP 8.5, aproveitando as melhorias de performance e as novas funcionalidades de tipagem nativa.
 
-Frontend Reativo: Usar Vue 3 com Inertia.js para transformar a aplicação em um SPA, ou criar uma API REST completa para atender mobile e web.
+    * Frontend Reativo: Implementação de interface SPA (Single Page Application) utilizando Vue 3 com Inertia.js ou arquitetura API First com consumo via Vue 3.
 
-2. Organização e Arquitetura
-   Services e Actions: Tirar a lógica de negócio dos Controllers e mover para classes específicas (Actions/Services), deixando o código mais limpo e fácil de testar.
+    * Filtros Avançados: Adição de seletor de calendário e filtros por períodos dinâmicos para análise de série histórica (atualmente fixo em Jan/2026 conforme requisito).
 
-Arquitetura por Domínios (DDD): Organizar o código por módulos (Qualidade, Produção, etc.) para facilitar a manutenção conforme o projeto cresce.
+2. Arquitetura e Qualidade de Código
+    * Camadas de Responsabilidade: Implementação de Service Layer ou Actions para desacoplar a lógica de negócio dos Controllers.
 
-Repositories: Isolar a lógica de banco de dados para facilitar futuras mudanças ou otimizações.
+    * Tipagem Estrita: Aumento da cobertura de tipos em toda a aplicação para reduzir bugs em tempo de execução.
 
-3. Qualidade e Segurança
-   PHPStan Nível Máximo: Configurar o PHPStan no nível 9 para garantir que não existam erros de tipo em nenhuma parte do sistema.
+    * PHPStan Nível MAX: Configuração da análise estática no nível máximo (Level 9) para garantir a integridade total do código.
 
-Testes com Pest: Implementar testes de integração e feature usando Pest PHP para garantir que as regras de negócio críticas não quebrem.
+    * Suite de Testes: Implementação de testes unitários e de integração utilizando Pest PHP para garantir a estabilidade das regras de negócio.
 
-4. Infraestrutura
-    CI/CD Avançado: Melhorar o pipeline atual para fazer deploys automáticos e verificações de segurança em cada atualização.
+3. Performance e Real-time
+    * Caching com Redis: Implementação de cache para consultas de dashboards de alta volumetria.
+    
+    * Comunicação Real-time: Integração de WebSockets (Laravel Echo + Redis) para atualização dinâmica dos gráficos no frontend Vue 3, permitindo que a diretoria acompanhe a produção em tempo real sem necessidade de refresh.
+    
+    * CI/CD Avançado: Pipeline automatizado para verificações de segurança, análise estática e deploys contínuos.
+    
