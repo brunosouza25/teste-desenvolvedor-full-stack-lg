@@ -48,6 +48,11 @@ docker compose exec app php artisan key:generate
 # Rodar migrations + seeders
 docker compose exec app php artisan migrate --seed
 ```
+## Para refazer os dados randomicos só executar o comando: 
+
+```bash
+docker compose exec app php artisan migrate:fresh --seed
+```
 
 ## Permissões (IMPORTANTE)
 
